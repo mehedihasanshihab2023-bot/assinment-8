@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { getCollections } from "../db.js";
 import { optionalAuth, requireAuth } from "../lib/auth.js";
-import { STUDIO_CATEGORIES } from "../lib/constants.js";
+import { STUDIO_CATEGORIES, resolveCategory } from "../lib/constants.js";
 import { asyncHandler, httpError } from "../lib/http.js";
 import {
   escapeRegex,
@@ -101,10 +101,10 @@ router.get(
     }
     if (trimString(category)) {
       const requested = trimString(category);
-      const matched = STUDIO_CATEGORIES.find(
-        (item) => item.toLowerCase() === requested.toLowerCase()
-      );
-      filter.category = matched || requested;
+      const canonical = resolveCategory(requested);
+      // Unknown categories fall back to the raw value so the client can show
+      // its empty state instead of a hard error.
+      filter.category = canonical || requested;
     }
     if (trimString(location)) {
       filter.location = new RegExp(escapeRegex(trimString(location)), "i");

@@ -8,6 +8,39 @@ export const STUDIO_CATEGORIES = [
 
 export const BOOKING_STATUS = ["Pending", "Confirmed", "Completed", "Cancelled"];
 
+/**
+ * The home page category cards use plural marketing labels ("Photo Studios",
+ * "Sound Stages", ...) while listings store the canonical category names.
+ * This resolver keeps both spellings working in `?category=` filters.
+ */
+export const CATEGORY_ALIASES = {
+  "photo studio": "Photo Studio",
+  "photo studios": "Photo Studio",
+  photography: "Photo Studio",
+  "film stage": "Film Stage",
+  "film stages": "Film Stage",
+  "sound stage": "Film Stage",
+  "sound stages": "Film Stage",
+  "podcast lounge": "Podcast Lounge",
+  "podcast lounges": "Podcast Lounge",
+  "podcast room": "Podcast Lounge",
+  "podcast rooms": "Podcast Lounge",
+  "music suite": "Music Suite",
+  "music suites": "Music Suite",
+  "recording studio": "Music Suite",
+  workshop: "Workshop",
+  workshops: "Workshop",
+  "art workshop": "Workshop",
+  "art workshops": "Workshop",
+};
+
+export function resolveCategory(value) {
+  const key = String(value || "").trim().toLowerCase();
+  if (!key) return "";
+  return CATEGORY_ALIASES[key] || null;
+}
+
+
 export const CATEGORY_PRESETS = [
   {
     name: "Photo Studio",
